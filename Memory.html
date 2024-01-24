@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="MemoryColorPickers.js"></script>
+    <script src="MemoryHandler.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Memory Game</h1>
+        <div id="gameStatus">
+            <p>Used time: <span id="timeUsed"></span></p>
+            <p>Remaining time: <span id="timeRemaining"></span></p>
+            <p>Found pairs: <span id="foundPairs"></span></p>
+        </div>
+    </header>
+
+    <main>
+
+        <section id="board" style="display: grid">
+
+        </section>
+        
+
+        <aside>
+            <div id="topFive">
+                <h2>Top Five</h2>
+                <ul>
+
+                </ul>
+            </div>
+            <p>Average play time: <span id="timeAveragePlayed"></span></p>
+
+            <section id="Settings">
+                <div class="setting-character">
+                    <label for="Characterset">Characters:</label>
+                    <select id="CharacterSelected">
+                        <option value="picsum">Random Images</option>
+                        <option value="dog">Dog Images</option>
+                        <option value="cat">Cat Images</option>
+                    </select>
+                </div>
+                </select>
+    
+                <div class="setting-size">
+                    <label for="sizeSelect">Board Size:</label>
+                    <select id="sizeSelected">
+                        <option value="4x4">4x4</option>
+                        <option value="6x6">6x6</option>
+                        <option value="8x8">8x8</option>
+                    </select>
+                </div>
+                </select>
+    
+                <div class="setting-colors">
+                    <div class="setting-color-closed">
+                        <label for="colorClosed">Color Closed:</label>
+                        <input type="color" id="colorClosed">
+                    </div>
+                    <div class="setting-color-open">
+                        <label for="colorOpen">Color Open:</label>
+                        <input type="color" id="colorOpen">
+                    </div>
+                    <div class="setting-color-found">
+                        <label for="colorFound">Color Found:</label>
+                        <input type="color" id="colorFound">
+                    </div>
+                </div>
+    
+                <button id="startGame">Start Game</button>
+            </section>
+        </aside>
+
+        
+    </main>
+
+    <footer>
+        
+    </footer>
+
+    
+</body>
+</html>
