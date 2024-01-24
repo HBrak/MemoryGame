@@ -1,0 +1,3 @@
+[submodule "memory-backend"]
+	path = memory-backend
+	url = https://github.com/hanze-hbo-ict/memory-backend
