@@ -1,3 +1,22 @@
+/* Media query for larger screens */
+@media (min-width: 768px) {
+    main {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    #board, #Settings, #topFive, aside {
+        width: auto; /* Auto width on larger screens */
+        margin: 10px; /* Spacing around elements */
+    }
+
+    #Settings, #topFive {
+        max-width: 200px; /* Limit the width of side sections */
+    }
+}
+
 .card {
     width: 100px;
     height: 100px;
@@ -52,21 +71,7 @@ body {
     margin-top: 20px;
 }
 
-/* Media query for larger screens */
-@media (min-width: 768px) {
-    main {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-    }
-
-    #board, #Settings, #topFive, aside {
-        width: auto; /* Auto width on larger screens */
-        margin: 10px; /* Spacing around elements */
-    }
-
-    #Settings, #topFive {
-        max-width: 200px; /* Limit the width of side sections */
-    }
+header {
+    align-self: flex-end; /* Align the header to the right */
+    width: 100%; /* Ensure the header takes full width */
 }

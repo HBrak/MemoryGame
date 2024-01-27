@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="MemoryColorPickers.js"></script>
-    <script src="MemoryHandler.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Styles/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <title>Memory Game</title>
+    <script src="Scripts/MemoryColorPickers.js"></script>
+    <script src="Scripts/MemoryHandler.js"></script>
+    <script src="Scripts/MemoryHighscores.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Memory Game</h1>
-        <div id="gameStatus">
-            <p>Used time: <span id="timeUsed"></span></p>
-            <p>Remaining time: <span id="timeRemaining"></span></p>
-            <p>Found pairs: <span id="foundPairs"></span></p>
-        </div>
-    </header>
-
+    <script src="../Scripts/MenuBalk.js"></script>
     <main>
-
-        <section id="board" style="display: grid">
-
-        </section>
+        <div>
+            <h1>Memory Game</h1>
+            <div id="gameStatus">
+                <p>Used time: <span id="timeUsed"></span></p>
+                <p>Remaining time: <span id="timeRemaining"></span></p>
+                <p>Found pairs: <span id="foundPairs"></span></p>
+                <p>Average play time: <span id="timeAveragePlayed"></span></p>
+            </div>
+        </div>
         
+        <section id="board" style="display: grid">
+            
+        </section>
 
         <aside>
             <div id="topFive">
-                <h2>Top Five</h2>
-                <ul>
-
-                </ul>
+                <table id="players">
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                </table>
             </div>
-            <p>Average play time: <span id="timeAveragePlayed"></span></p>
+            
 
             <section id="Settings">
                 <div class="setting-character">
@@ -73,14 +79,6 @@
                 <button id="startGame">Start Game</button>
             </section>
         </aside>
-
-        
     </main>
-
-    <footer>
-        
-    </footer>
-
-    
 </body>
 </html>
