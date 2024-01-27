@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../GeneralStyles.css">
     <link rel="stylesheet" href="Styles/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
@@ -14,9 +15,9 @@
     <script src="Scripts/MemoryHighscores.js"></script>
 </head>
 <body>
-    <script src="../Scripts/MenuBalk.js"></script>
+    <script src="../Scripts/MenuHeader.js"></script>
     <main>
-        <div>
+        <div style="align-self: flex-start;">
             <h1>Memory Game</h1>
             <div id="gameStatus">
                 <p>Used time: <span id="timeUsed"></span></p>
@@ -26,59 +27,62 @@
             </div>
         </div>
         
-        <section id="board" style="display: grid">
+        <div>
+            <section id="board" style="display: grid">
             
-        </section>
-
-        <aside>
-            <div id="topFive">
-                <table id="players">
-                    <th>Position</th>
-                    <th>Name</th>
-                    <th>Score</th>
-                </table>
-            </div>
-            
-
-            <section id="Settings">
-                <div class="setting-character">
-                    <label for="Characterset">Characters:</label>
-                    <select id="CharacterSelected">
-                        <option value="picsum">Random Images</option>
-                        <option value="dog">Dog Images</option>
-                        <option value="cat">Cat Images</option>
-                    </select>
-                </div>
-                </select>
-    
-                <div class="setting-size">
-                    <label for="sizeSelect">Board Size:</label>
-                    <select id="sizeSelected">
-                        <option value="4x4">4x4</option>
-                        <option value="6x6">6x6</option>
-                        <option value="8x8">8x8</option>
-                    </select>
-                </div>
-                </select>
-    
-                <div class="setting-colors">
-                    <div class="setting-color-closed">
-                        <label for="colorClosed">Color Closed:</label>
-                        <input type="color" id="colorClosed">
-                    </div>
-                    <div class="setting-color-open">
-                        <label for="colorOpen">Color Open:</label>
-                        <input type="color" id="colorOpen">
-                    </div>
-                    <div class="setting-color-found">
-                        <label for="colorFound">Color Found:</label>
-                        <input type="color" id="colorFound">
-                    </div>
-                </div>
-    
-                <button id="startGame">Start Game</button>
             </section>
-        </aside>
+    
+            <aside>
+                <div id="topFive">
+                    <table id="players">
+                        <th>Position</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </table>
+                </div>
+                
+    
+                <section id="Settings">
+                    <div class="setting-character">
+                        <label for="Characterset">Characters:</label>
+                        <select id="CharacterSelected">
+                            <option value="picsum">Random Images</option>
+                            <option value="dog">Dog Images</option>
+                            <option value="cat">Cat Images</option>
+                        </select>
+                    </div>
+                    </select>
+        
+                    <div class="setting-size">
+                        <label for="sizeSelect">Board Size:</label>
+                        <select id="sizeSelected">
+                            <option value="4x4">4x4</option>
+                            <option value="6x6">6x6</option>
+                            <option value="8x8">8x8</option>
+                        </select>
+                    </div>
+                    </select>
+        
+                    <div class="setting-colors">
+                        <div class="setting-color-closed">
+                            <label for="colorClosed">Color Closed:</label>
+                            <input type="color" id="colorClosed">
+                        </div>
+                        <div class="setting-color-open">
+                            <label for="colorOpen">Color Open:</label>
+                            <input type="color" id="colorOpen">
+                        </div>
+                        <div class="setting-color-found">
+                            <label for="colorFound">Color Found:</label>
+                            <input type="color" id="colorFound">
+                        </div>
+                    </div>
+        
+                    <button id="startGame">Start Game</button>
+                </section>
+            </aside>
+        </div>
+        
     </main>
 </body>
 </html>

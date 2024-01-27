@@ -1,0 +1,30 @@
+/* Media query for larger screens */
+@media (min-width: 768px) {
+    main {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}
+
+header {
+    align-self: flex-end;
+    width: 100%;
+}
+
+.btn-primary {
+background-color: #ff5733;
+border-color: #ff5733;
+color: #fff;
+}
+
+.btn-secondary {
+background-color: #7c7c7c;
+border-color: #7c7c7c;
+color: #fff;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #333;
+}

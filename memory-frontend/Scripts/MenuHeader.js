@@ -8,13 +8,13 @@ if (window.self === window.top) {
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link btn btn-primary" href="http://localhost:8080/Home/PageHome.html">Home</a>
+              <a class="nav-link btn btn-primary" href="../Home/PageHome.html">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-primary" href="http://localhost:8080/Login/PageLogin.html">Login</a>
+              <a class="nav-link btn btn-primary" href="../Login/PageLogin.html">Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-primary" href="http://localhost:8080/Game/PageGame.html">Game</a>
+              <a class="nav-link btn btn-primary" href="../Game/PageGame.html">Game</a>
             </li>
           </ul>
         </div>
