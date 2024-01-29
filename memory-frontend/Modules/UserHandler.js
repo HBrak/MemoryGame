@@ -16,13 +16,18 @@ export function loginUser(username, password) {
             document.getElementById('message').innerText = 'Invalid login.';
             return;
         }
-        document.getElementById('message').innerText = 'Login successful.';
+        document.getElementById('message').innerText = 'Login successful. You will be redirected soon.';
         return response.json();
     })
     .then(data => {
         if (data && data.token) {
             localStorage.setItem('jwtToken', data.token);
             console.log('Token stored in local storage');
+
+             // Redirect after 1 second
+             setTimeout(() => {
+                window.location.href = '../User/PageUserInfo.html';
+            }, 1000);
         }
     })
     .catch((error) => {
@@ -46,7 +51,13 @@ export function registerUser(username, email, password) {
     })
     .then(response => {
         if (response.status === 201) {
-            document.getElementById('message').innerText = 'Registration successful.';
+            document.getElementById('message').innerText = 'Registration successful. You will be redirected soon.';
+
+             // Redirect after 1 second
+             setTimeout(() => {
+                window.location.href = '../User/PageLogin.html';
+            }, 1000);
+
         } else {
             document.getElementById('message').innerText = 'Registration failed.';
         }

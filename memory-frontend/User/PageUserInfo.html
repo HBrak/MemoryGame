@@ -63,12 +63,12 @@
         
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const preferences = await GetPreferences();
+                let preferences = await GetPreferences();
 
-                document.getElementById('colorOpen').value = preferences.color_open;
-                document.getElementById('colorClosed').value = preferences.color_closed;
-                document.getElementById('colorFound').value = preferences.color_found;
-                document.getElementById('CharacterSelected').value = preferences.api;
+                document.getElementById('colorOpen').value = preferences.color_open.toString();;
+                document.getElementById('colorClosed').value = preferences.color_closed.toString();;
+                document.getElementById('colorFound').value = preferences.color_found.toString();;
+                document.getElementById('CharacterSelected').value = preferences.api.toString();;
                 document.getElementById('sizeSelected').value = preferences.boardSize.toString();
 
                 // Event listeners for color and character selection changes
@@ -119,7 +119,7 @@
         async function savePreferences(){
             try {
                 let jwtToken = getValidDecodedToken();
-                const preferences = await GetPreferences();
+                let preferences = await GetPreferences();
 
                 preferences.color_open = document.getElementById('colorOpen').value;
                 preferences.color_closed = document.getElementById('colorClosed').value;

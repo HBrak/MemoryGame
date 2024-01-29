@@ -22,7 +22,7 @@ import { getValidDecodedToken, decodeJWT } from '../Modules/JwtHandler.js'; // A
     preferences = await FetchPreferences();
     if (preferences) {
         SetPreferences(preferences.color_open, preferences.color_closed, preferences.color_found, preferences.api, preferences.boardSize, preferences.subId);
-        return preferences;
+        return GetPreferences();
     }
 
     preferences = DefaultPreferences();
@@ -31,7 +31,7 @@ import { getValidDecodedToken, decodeJWT } from '../Modules/JwtHandler.js'; // A
     if (!postResult) {
         console.error('Failed to post preferences');
     }
-    return preferences;
+    return GetPreferences();
 }
 
 /**

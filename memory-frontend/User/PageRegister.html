@@ -26,7 +26,9 @@
             <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
-        <input type="button" value="Register" onclick="redirectRegisterUser()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <input type="button" value="Login here" onclick="redirectToLogin()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4">
+        <input type="button" value="Register" onclick="redirectRegisterUser()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4">
+        
     </form>
 
     <div id="message" class="max-w-sm mx-auto mt-4"></div>
@@ -42,6 +44,11 @@
             registerUser(username, email, password);
         }
         window.redirectRegisterUser = redirectRegisterUser;
+    </script>
+    <script>
+        function redirectToLogin() {
+            window.location.href = '../User/PageLogin.html';
+        }
     </script>
 </body>
 </html>
