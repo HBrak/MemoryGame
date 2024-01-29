@@ -2,73 +2,71 @@ import { getValidDecodedToken, decodeJWT } from '../Modules/JwtHandler.js'; // A
 
 /**
  * @typedef {Object} Preferences
- * @property {string} id
- * @property {string} openColor
- * @property {string} closedColor
- * @property {string} foundColor
- * @property {string} imageType
+ * @property {string} subId
+ * @property {string} color_open
+ * @property {string} color_closed
+ * @property {string} color_found
+ * @property {string} api
  * @property {string} boardSize
  */
 
 /**
- * @returns {string} preferences
+ * @returns {Promise<string>} preferences
  */
-export function GetPreferences(){
+ export async function GetPreferences() {
     let preferences = localStorage.getItem('preferences');
-    if (preferences){
-        console.log('found preferences', preferences);
-        return preferences;
+    if (preferences) {
+        return JSON.parse(preferences);
     }
 
-    preferences = FetchPreferences();
-    if (preferences){
-        console.log('fetched preferences', preferences);
+    preferences = await FetchPreferences();
+    if (preferences) {
+        SetPreferences(preferences.color_open, preferences.color_closed, preferences.color_found, preferences.api, preferences.boardSize, preferences.subId);
         return preferences;
     }
 
     preferences = DefaultPreferences();
-    console.log('Set the default preferences', preferences);
-    
-    if (PostPreferences()){
-        console.log('Posted default preferences');
-    } else {
+
+    const postResult = await PostPreferences();
+    if (!postResult) {
         console.error('Failed to post preferences');
     }
     return preferences;
 }
 
 /**
- * @returns {Preferences | false}
+ * @returns {Promise<Preferences | false>}
  */
-export function FetchPreferences(){
+ export function FetchPreferences() {
+
     let jwtToken = getValidDecodedToken();
 
     if (!jwtToken) {
         console.error('JWT token not found');
-        return;
+        return Promise.resolve(false);
     }
 
     var url = 'http://localhost:8000/api/player/' + jwtToken.sub + '/preferences';
 
-    fetch(url, {
+    return fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': 'Bearer ' + jwtToken.token, // Include the JWT token in the Authorization header
+            'Authorization': 'Bearer ' + jwtToken.token,
             'Content-Type': 'application/json'
         }
     })
     .then(response => {
         if (!response.ok) {
-            return false;
+            throw new Error('Network response was not ok');
         }
-        console.log('preferences response', response);
+        return response.json();
     })
     .then(data => {
         if (data && data.preferences) {
-            let preferences = JSON.stringify(data.preferences);
-            preferences.id = jwtToken.sub;
-            localStorage.setItem('preferences', );
-            console.log('preferences stored in local storage');
+            // Assuming data.preferences contains the preferences
+            return data.preferences;
+        } else {
+            return false;
         }
     })
     .catch(error => {
@@ -77,47 +75,54 @@ export function FetchPreferences(){
     });
 }
 
+
 /**
  * @returns {true | false}
  */
-export function SetPreferences(openColor, closedColor, foundColor, imageType, boardSize){
-    var preferences = {
-        openColor: openColor,
-        closedColor: closedColor,
-        foundColor: foundColor,
-        imageType: imageType,
-        boardSize: boardSize
+ export function SetPreferences(openColor, closedColor, foundColor, imageType, boardSize, subId) {
+    let preferences = {
+        color_open: openColor,
+        color_closed: closedColor,
+        color_found: foundColor,
+        api: imageType,
+        boardSize: boardSize,
+        subId: subId
     };
 
     localStorage.setItem('preferences', JSON.stringify(preferences));
+    return true;
 }
 
 /**
  * @returns {true | false}
  */
-export function PostPreferences(){
+ export async function PostPreferences() {
     let jwtToken = getValidDecodedToken();
-
     if (!jwtToken) {
-        console.error('JWT token not found');
-        return;
+        return false;
     }
 
-    let preferences = GetPreferences();
+    let preferences = await GetPreferences();
+    let url = 'http://localhost:8000/api/player/' + jwtToken.sub + '/preferences';
 
-    var url = 'http://localhost:8000/api/player/' + jwtToken.sub + '/preferences';
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken.token,
+                'Content-Type': 'application/ld+json',
+            },
+            body: JSON.stringify(preferences)
+        });
 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + jwtToken.token, // Include the JWT token in the Authorization header
-            'Content-Type': 'application/ld+json',
-        },
-        body: preferences
-    })
-    .catch((error) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return true;
+    } catch (error) {
         console.error('Posting preferences error:', error);
-    });
+        return false;
+    }
 }
 
 /**
@@ -125,16 +130,16 @@ export function PostPreferences(){
  */
 export function DefaultPreferences(){
     let jwtToken = getValidDecodedToken();
-    var preferences = {
-        id: jwtToken.sub,
-        openColor: '#20b960',
-        closedColor: '#808080',
-        foundColor: '#80006b',
-        imageType: 'picsum',
+    let preferences = {
+        subId: jwtToken.sub,
+        color_open: '#20b960',
+        color_closed: '#808080',
+        color_found: '#80006b',
+        api: 'picsum',
         boardSize: '4'
     };
 
-    var preferencesJson = JSON.stringify(preferences);
+    let preferencesJson = JSON.stringify(preferences);
 
     localStorage.setItem('preferences', preferencesJson);
     return preferencesJson;
@@ -171,48 +176,42 @@ function fetchSingleImage(api) {
         .catch(error => console.error('Fetch error:', error));
 }
 
-export function LoadCards() {
-    let preferences = GetPreferences();
-    var settings = JSON.parse(preferences);
+export async function LoadCards() {
+    let preferences = await GetPreferences();
 
-    fetchSingleImage(settings.imageType).then(imgurl => {
-        const board = document.getElementById('board');
-        while (board.firstChild) {
-            board.removeChild(board.firstChild);
-        }
+    const imgurl = await fetchSingleImage(preferences.api);
+    const board = document.getElementById('board');
+    while (board.firstChild) {
+        board.removeChild(board.firstChild);
+    }
 
-        let states = ['closed', 'open', 'found'];
-        let colors = [settings.closedColor, settings.openColor, settings.foundColor]; // assuming these are defined
+    let states = ['closed', 'open', 'found'];
+    let colors = [preferences.color_closed, preferences.color_open, preferences.color_found];
 
-        for (let i = 0; i < states.length; i++) {
-            let state = states[i];
-            let color = colors[i];
+    for (let i = 0; i < states.length; i++) {
+        let state = states[i];
+        let color = colors[i];
 
-            console.log(state, color);
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('state', state);
+        card.style.backgroundColor = color;
 
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.setAttribute('state', state);
-            card.style.backgroundColor = color;
-
-            const imageContainer = document.createElement('div');
-            imageContainer.classList.add('image-container');
-            imageContainer.setAttribute('data-card-index', i);
-            imageContainer.style.backgroundImage = `url('${imgurl}')`;
-            imageContainer.style.display = (state === 'closed') ? 'none' : 'block';
-            
-            card.appendChild(imageContainer);
-            board.appendChild(card);
-        }
-    });
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+        imageContainer.setAttribute('data-card-index', i);
+        imageContainer.style.backgroundImage = `url('${imgurl}')`;
+        imageContainer.style.display = (state === 'closed') ? 'none' : 'block';
+        
+        card.appendChild(imageContainer);
+        board.appendChild(card);
+    }
 }
 
-export function UpdateImages(imagetype) {
-    fetchSingleImage(imagetype).then(imgurl => {
-
-        const containers = document.querySelectorAll('.image-container[data-card-index]');
-        containers.forEach(container => {
-            container.style.backgroundImage = `url('${imgurl}')`;
-        });
+export async function UpdateImages(imagetype) {
+    const imgurl = await fetchSingleImage(imagetype);
+    const containers = document.querySelectorAll('.image-container[data-card-index]');
+    containers.forEach(container => {
+        container.style.backgroundImage = `url('${imgurl}')`;
     });
 }

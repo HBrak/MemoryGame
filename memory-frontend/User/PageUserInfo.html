@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../Styles/Styles.css">
     <link rel="stylesheet" href="../Styles/CardStyle.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <title>Account Info</title>
 </head>
 <body class="bg-gray-100 p-4">
@@ -18,7 +18,7 @@
 
     <section id="preferences" class="space-y-4">
         <div class="setting-character flex justify-between items-center">
-            <label for="Characterset" class="mr-2">Characters:</label>
+            <label for="CharacterSelected" class="mr-2">Characters:</label>
             <select id="CharacterSelected" class="p-2 border rounded">
                 <option value="picsum">Random Images</option>
                 <option value="dog">Dog Images</option>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="setting-size flex justify-between items-center">
-            <label for="sizeSelect" class="mr-2">Board Size:</label>
+            <label for="sizeSelected" class="mr-2">Board Size:</label>
             <select id="sizeSelected" class="p-2 border rounded">
                 <option value="4">4x4</option>
                 <option value="6">6x6</option>
@@ -51,41 +51,47 @@
         </div>
     </section>
 
-    <div id="preferences" class="my-6">
-        <!-- Account information will be displayed here -->
-    </div>
     <section id="board" class="grid grid-cols-4 gap-4">
         <!-- Dynamic board content -->
     </section>
+
+    <input type="button" value="save" onclick="savePreferences()" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
     <input type="button" value="Logout" onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
+
     <script type="module">
         import { GetPreferences, LoadCards, UpdateImages } from "../Modules/PreferenceHandler.js";
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const preferences = await GetPreferences();
 
-        var preferences = GetPreferences();
+                document.getElementById('colorOpen').value = preferences.color_open;
+                document.getElementById('colorClosed').value = preferences.color_closed;
+                document.getElementById('colorFound').value = preferences.color_found;
+                document.getElementById('CharacterSelected').value = preferences.api;
+                document.getElementById('sizeSelected').value = preferences.boardSize.toString();
 
-        console.log('Preferences to visualize:', preferences);
+                // Event listeners for color and character selection changes
+                document.getElementById('colorClosed').addEventListener('input', function(event) {
+                    updateCardColors('[state="closed"]', event.target.value);
+                });
 
-        var settings = JSON.parse(preferences);
+                document.getElementById('colorOpen').addEventListener('input', function(event) {
+                    updateCardColors('[state="open"]', event.target.value);
+                });
 
-        document.getElementById('colorOpen').value = settings.openColor;
-        document.getElementById('colorClosed').value = settings.closedColor;
-        document.getElementById('colorFound').value = settings.foundColor;
-        document.getElementById('CharacterSelected').value = settings.imageType;
-        document.getElementById('sizeSelected').value = settings.boardSize.toString();
-        document.getElementById('colorClosed').addEventListener('input', function(event) {
-            updateCardColors('[state="closed"]', event.target.value);
-        });
+                document.getElementById('colorFound').addEventListener('input', function(event) {
+                    updateCardColors('[state="found"]', event.target.value);
+                });
 
-        document.getElementById('colorOpen').addEventListener('input', function(event) {
-            updateCardColors('[state="open"]', event.target.value);
-        });
+                document.getElementById('CharacterSelected').addEventListener('change', function(event) {
+                    UpdateImages(event.target.value);
+                });
 
-        document.getElementById('colorFound').addEventListener('input', function(event) {
-            updateCardColors('[state="found"]', event.target.value);
-        });
-
-        document.getElementById('CharacterSelected').addEventListener('change', function(event) {
-            UpdateImages(event.target.value);
+                LoadCards();
+            } catch (error) {
+                console.error("Error loading preferences:", error);
+            }
         });
 
         function updateCardColors(selector, color) {
@@ -94,8 +100,9 @@
                 card.style.backgroundColor = color;
             });
         }
-        LoadCards();
     </script>
+
+
     <script type="module">
         import { logoutUser } from "../Modules/UserHandler.js";
 
@@ -103,6 +110,37 @@
             logoutUser();
         }
         window.logout = logout;
+    </script>
+
+    <script type="module">
+        import { GetPreferences, SetPreferences, PostPreferences } from "../Modules/PreferenceHandler.js";
+        import { getValidDecodedToken } from "../Modules/JwtHandler.js";
+
+        async function savePreferences(){
+            try {
+                let jwtToken = getValidDecodedToken();
+                const preferences = await GetPreferences();
+
+                preferences.color_open = document.getElementById('colorOpen').value;
+                preferences.color_closed = document.getElementById('colorClosed').value;
+                preferences.color_found = document.getElementById('colorFound').value;
+                preferences.api = document.getElementById('CharacterSelected').value;
+                preferences.boardSize = document.getElementById('sizeSelected').value;
+                SetPreferences(
+                    preferences.color_open,
+                    preferences.color_closed,
+                    preferences.color_found,
+                    preferences.api,
+                    preferences.boardSize,
+                    jwtToken.sub,
+                );
+
+                await PostPreferences();
+            } catch (error) {
+                console.error("Error saving preferences:", error);
+            }
+        }
+        window.savePreferences = savePreferences;
     </script>
 </body>
 </html>

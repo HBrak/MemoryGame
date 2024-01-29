@@ -24,7 +24,6 @@
 
         let jwtObject = JSON.parse(payload);
         jwtObject.token = token;
-        console.log('JWT decoded: ', jwtObject)
         return jwtObject;
     }
     return false;
@@ -53,7 +52,6 @@ function getValidDecodedToken(){
         return false;
     }
 
-    console.log('token found:', token)
 
     var decoded = decodeJWT(token);
     if (!decoded) {
@@ -81,8 +79,6 @@ function isTokenValid() {
         return false;
     }
 
-    console.log('token found:', token);
-
     var decoded = decodeJWT(token);
     if (!decoded) {
         console.log('Did not get decoded JWT');
@@ -90,8 +86,6 @@ function isTokenValid() {
     }
 
     var currentTime = Date.now() / 1000; // in seconds
-    console.log('Token expires:', decoded.exp);
-    console.log('Token time left:', decoded.exp-currentTime);
     return decoded.exp > currentTime;
 }
 
