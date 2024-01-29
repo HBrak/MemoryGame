@@ -1,66 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../Styles/GeneralStyles.css">
-        <link rel="stylesheet" href="Styles/styles.css">
-        <link rel="stylesheet" href="../Styles/CardStyle.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-        <title>Account Info</title>
-    </head>
-<body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/Styles.css">
+    <link rel="stylesheet" href="../Styles/CardStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
+    <title>Account Info</title>
+</head>
+<body class="bg-gray-100 p-4">
     <script type="module" src="../Modules/RedirectIfNotAuthenticated.js"></script>
     <script src="../Scripts/MenuHeader.js"></script>
-    <h1>Account Information</h1>
 
-    <section id="preferences">
-        <div class="setting-character">
-            <label for="Characterset">Characters:</label>
-            <select id="CharacterSelected">
+    <h1 class="text-2xl font-bold text-center my-6">Account Information</h1>
+
+    <section id="preferences" class="space-y-4">
+        <div class="setting-character flex justify-between items-center">
+            <label for="Characterset" class="mr-2">Characters:</label>
+            <select id="CharacterSelected" class="p-2 border rounded">
                 <option value="picsum">Random Images</option>
                 <option value="dog">Dog Images</option>
                 <option value="cat">Cat Images</option>
             </select>
         </div>
-        </select>
 
-        <div class="setting-size">
-            <label for="sizeSelect">Board Size:</label>
-            <select id="sizeSelected">
+        <div class="setting-size flex justify-between items-center">
+            <label for="sizeSelect" class="mr-2">Board Size:</label>
+            <select id="sizeSelected" class="p-2 border rounded">
                 <option value="4">4x4</option>
                 <option value="6">6x6</option>
                 <option value="8">8x8</option>
             </select>
         </div>
-        </select>
 
-        <div class="setting-colors">
+        <div class="setting-colors grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="setting-color-closed">
-                <label for="colorClosed">Color Closed:</label>
-                <input type="color" id="colorClosed">
+                <label for="colorClosed" class="block mb-1">Color Closed:</label>
+                <input type="color" id="colorClosed" class="p-1 border rounded">
             </div>
             <div class="setting-color-open">
-                <label for="colorOpen">Color Open:</label>
-                <input type="color" id="colorOpen">
+                <label for="colorOpen" class="block mb-1">Color Open:</label>
+                <input type="color" id="colorOpen" class="p-1 border rounded">
             </div>
             <div class="setting-color-found">
-                <label for="colorFound">Color Found:</label>
-                <input type="color" id="colorFound">
+                <label for="colorFound" class="block mb-1">Color Found:</label>
+                <input type="color" id="colorFound" class="p-1 border rounded">
             </div>
         </div>
     </section>
 
-    <div id="preferences">
+    <div id="preferences" class="my-6">
         <!-- Account information will be displayed here -->
     </div>
-    <section id="board" style="display: grid">
-            
+    <section id="board" class="grid grid-cols-4 gap-4">
+        <!-- Dynamic board content -->
     </section>
-    <input type="button" value="Logout" onclick="logout()">
+    <input type="button" value="Logout" onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
     <script type="module">
         import { GetPreferences, LoadCards, UpdateImages } from "../Modules/PreferenceHandler.js";
 

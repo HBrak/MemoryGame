@@ -1,4 +1,9 @@
-/* Media query for larger screens */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @media (min-width: 768px) {
     main {
         display: flex;

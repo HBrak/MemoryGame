@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../Styles/GeneralStyles.css">
-    <link rel="stylesheet" href="Styles/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/Styles.css">
+    <link rel="stylesheet" href="Styles/Styles.css">
     <link rel="stylesheet" href="../Styles/CardStyle.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <title>Memory Game</title>
-    <!--<script src="Scripts/MemoryColorPickers.js"></script>-->
     <script type="module" src="../Modules/MemoryHandler.js"></script>
     <script src="Scripts/MemoryHighscores.js"></script>
 </head>
-<body>
+<body class="bg-gray-100">
     <script type="module" src="../Modules/RedirectIfNotAuthenticated.js"></script>
     <script src="../Scripts/MenuHeader.js"></script>
-    <main>
+    <main class="container mx-auto p-4">
         <div>
-            <h1>Memory Game</h1>
-            <div id="gameStatus">
+            <h1 class="text-4xl font-bold my-4">Memory Game</h1>
+            <div id="gameStatus" class="space-y-2">
                 <p>Used time: <span id="timeUsed"></span></p>
                 <p>Remaining time: <span id="timeRemaining"></span></p>
                 <p>Found pairs: <span id="foundPairs"></span></p>
@@ -29,23 +25,29 @@
             </div>
         </div>
         
-        <div class="gameContainer">
-            <section id="board" style="display: grid">
-            
+        <div class="flex flex-wrap mt-4">
+            <section id="board" class="w-full lg:w-2/3 grid grid-cols-4 gap-4">
+                <!-- Dynamic content -->
             </section>
     
-            <aside>
-                <div id="topFive">
-                    <table id="players">
-                        <th>Position</th>
-                        <th>Name</th>
-                        <th>Score</th>
+            <aside class="w-full lg:w-1/3 mt-4 lg:mt-0">
+                <div id="topFive" class="overflow-auto">
+                    <table id="players" class="table-auto w-full">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic content -->
+                        </tbody>
                     </table>
                 </div>
-                <button id="startGame">Start Game</button>
+                <button id="startGame" class="bg-blue-500 text-white py-2 px-4 rounded mt-4">Start Game</button>
             </aside>
         </div>
-        
     </main>
 </body>
 </html>
