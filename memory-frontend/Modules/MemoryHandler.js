@@ -1,5 +1,16 @@
+
+import { GetPreferences } from '../Modules/PreferenceHandler.js'; // Adjust the path as necessary
+
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('startGame').addEventListener('click', function() {
+
+        
+        var preferences = GetPreferences();
+
+        console.log('Preferences to play with:', preferences);
+
+        var settings = JSON.parse(preferences);
+
         const board = document.getElementById('board');
 
         // Remove existing cards from the board
@@ -7,13 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
             board.removeChild(board.firstChild);
         }
 
-        const apiSelected = document.getElementById('CharacterSelected').value;
-        const sizeSelected = parseInt(document.getElementById('sizeSelected').value, 10);
-
         // Calculate the number of unique images needed
-        const imageCount = (sizeSelected * sizeSelected) / 2;
+        const imageCount = (settings.boardSize * settings.boardSize) / 2;
 
-        fetchImages(apiSelected, imageCount).then(images => {
+        fetchImages(settings.imageType, imageCount).then(images => {
             // Duplicate each image URL to create pairs
             let imagePairs = images.concat(images);
         
@@ -28,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.setAttribute('state', 'closed');
+                card.setAttribute('closedColor', settings.closedColor);
+                card.setAttribute('openColor', settings.openColor);
+                card.setAttribute('foundColor', settings.foundColor);
             
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('image-container');
@@ -39,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.dataset.openImage = imagePairs[i]; // Store the image URL in dataset
             
                 // Set background color for closed state
-                card.style.backgroundColor = document.getElementById('colorClosed').value;
+                card.style.backgroundColor = card.getAttribute('closedColor');
             
                 // Add event listener to handle card interactions
                 card.addEventListener('click', handleCardClick);
@@ -50,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
 
         // Style the board based on the selected size
-        board.style.gridTemplateColumns = `repeat(${sizeSelected}, 1fr)`;
+        board.style.gridTemplateColumns = `repeat(${settings.boardSize}, 1fr)`;
     });
 });
 
@@ -62,7 +73,7 @@ function handleCardClick() {
     if (this.getAttribute('state') === 'closed' && openCards.length < 2) {
         // Open the card
         this.setAttribute('state', 'open');
-        this.style.backgroundColor = document.getElementById('colorOpen').value;
+        this.style.backgroundColor = this.getAttribute('openColor');
         imageContainer.style.display = 'block'; // Show the image
         openCards.push(this);
 
@@ -72,7 +83,7 @@ function handleCardClick() {
                 openCards.forEach(card => {
                     const imgContainer = card.querySelector('.image-container');
                     card.setAttribute('state', 'found');
-                    card.style.backgroundColor = document.getElementById('colorFound').value;
+                    card.style.backgroundColor = this.getAttribute('foundColor');
                     imgContainer.style.display = 'block'; // Keep the image visible
                 });
                 openCards = [];
@@ -82,7 +93,7 @@ function handleCardClick() {
                     openCards.forEach(card => {
                         const imgContainer = card.querySelector('.image-container');
                         card.setAttribute('state', 'closed');
-                        card.style.backgroundColor = document.getElementById('colorClosed').value;
+                        card.style.backgroundColor = this.getAttribute('closedColor');
                         imgContainer.style.display = 'none'; // Hide the image
                     });
                     openCards = [];
@@ -140,36 +151,48 @@ function displayWinMessage() {
     });
 }
 
+
+
+fetch('https://picsum.photos/200/200', {
+    method: 'GET',
+    redirect: 'follow'  // This ensures that the fetch request follows any redirects
+})
+.then(response => {
+    // The URL after any redirects
+    const imageUrl = response.url;
+
+    console.log('Redirected image URL:', imageUrl);
+
+    // You can now use imageUrl as needed
+})
+
+
 function fetchImages(api, count) {
     let url;
     switch (api) {
         case 'picsum':
-
+            // Fetch each image and get the redirected URL
             return Promise.all(
                 Array.from({ length: count }, () => {
-                    const randomId = Math.floor(Math.random() * 1000);
-                    return `https://picsum.photos/id/${randomId}/200/300`;
+                    return fetch('https://picsum.photos/200/200', { redirect: 'follow' })
+                        .then(response => response.url) // Get the redirected URL
+                        .catch(error => console.error('Fetch error:', error));
                 })
             );
 
         case 'dog':
             url = `https://dog.ceo/api/breeds/image/random/${count}`;
-            break;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => data.message) // Dog API returns an object with 'message' containing the array of images
+                .catch(error => console.error('Fetch error:', error));
 
         case 'cat':
             url = `https://api.thecatapi.com/v1/images/search?limit=${count}`;
-            break;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => data.map(item => item.url)) // Cat API returns an array of objects, extract the image URLs
+                .catch(error => console.error('Fetch error:', error));
     }
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (api === 'dog') {
-                return data.message; // Dog API returns an object with 'message' containing the array of images
-            }
-            // The Cat API returns an array of objects, extract the image URLs
-            return data.map(item => item.url);
-        });
 }
-
 

@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta http-equiv="refresh" content="0;url=/Home/PageHome.html">
-    </head>
+    <body>
+        <script type="module">
+            import { isTokenValid } from './Modules/JwtHandler.js';
+    
+            function redirectToPageBasedOnToken() {
+                if (isTokenValid()) {
+                    window.location.href = '/Game/PageGame.html';
+                } else {
+                    window.location.href = '/Advertisement/Advertisement.html';
+                }
+            }
+    
+            redirectToPageBasedOnToken();
+        </script>
+    </body>
 </html>
 

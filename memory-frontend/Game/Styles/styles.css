@@ -15,17 +15,19 @@ main {
     flex-direction: column;
 }
 
-.card {
-    width: 100px;
-    height: 100px;
-    border: 1px solid black;
-    margin: 5px;
-    background-size: 60px 60px; /* Make the image smaller than the card */
-    background-position: center; /* Center the image within the card */
-    background-repeat: no-repeat; /* Prevent the image from repeating */
+aside {
+    width: 200px; /* Set a fixed width for the aside section */
+}
+
+#players th {
+    padding: 10px; /* Adjust the value to control the amount of padding */
+}
+
+.gameContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between; /* To place the board and aside sections side by side */
+    align-items: flex-start; /* Align the top of the container */
 }
 
 .image-container {
@@ -36,20 +38,6 @@ main {
     background-repeat: no-repeat;
 }
 
-
-.card[state="closed"] {
-    background-color: gray;
-}
-
-.card[state="open"] {
-    background-color: rgb(32, 185, 96);
-}
-
-.card[state="found"] {
-    background-color: rgb(128, 0, 107);
-}
-
-
 body {
     display: flex;
     flex-direction: column;
@@ -57,6 +45,7 @@ body {
 }
 
 #board {
+    flex: 1;
     margin-bottom: 20px;
 }
 

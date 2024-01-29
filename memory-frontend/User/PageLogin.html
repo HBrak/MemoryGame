@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../Styles/GeneralStyles.css">
+        <link rel="stylesheet" href="Styles/styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudfare.com/ajax/libs/proper.js/1.14.3/umd/proper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        
+        
+        <title>Login</title>
+    </head>
+    <body>
+        <script src="../Scripts/MenuHeader.js"></script>
+        <form id="loginForm">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+    
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br>
+    
+            <input type="button" value="Login" onclick="redirectLoginUser()">
+        </form>
+    
+        <div id="message"></div>
+
+        <script type="module">
+            import { loginUser } from "../Modules/UserHandler.js";
+
+            function redirectLoginUser() {
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+                
+                loginUser(username, password);
+            }
+            window.redirectLoginUser = redirectLoginUser;
+        </script>
+    </body>
+</html>
+

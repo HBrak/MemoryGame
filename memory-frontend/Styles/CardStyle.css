@@ -1,0 +1,20 @@
+.card {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    margin: 5px;
+    background-size: 60px 60px; /* Make the image smaller than the card */
+    background-position: center; /* Center the image within the card */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container {
+    width: 90px; /* Smaller than the card */
+    height: 90px; /* Smaller than the card */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
