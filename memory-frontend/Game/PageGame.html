@@ -8,40 +8,43 @@
     <link rel="stylesheet" href="Styles/Styles.css">
     <link rel="stylesheet" href="../Styles/CardStyle.css">
     <title>Memory Game</title>
-    <script type="module" src="../Modules/MemoryHandler.js"></script>
-    <script src="Scripts/MemoryHighscores.js"></script>
 </head>
 <body class="bg-gray-100">
     <script type="module" src="../Modules/RedirectIfNotAuthenticated.js"></script>
     <script src="../Scripts/MenuHeader.js"></script>
     <main class="container mx-auto p-4">
+        <!-- Title at the top spanned -->
+        <div class="flex justify-center">
+            <h1 class="text-4xl font-bold my-4">Memory Game</h1>
+        </div>
         <!-- Flex container for the game status and high scores table -->
-        <div class="flex flex-col lg:flex-row">
-            <!-- Memory Game Status -->
+        <div class="flex flex-col lg:flex-row justify-between">
+            <!-- Highscores Table on the left -->
             <div class="flex-1">
-                <h1 class="text-4xl font-bold my-4">Memory Game</h1>
-                <div id="gameStatus" class="mb-4">
-                    <p>Used time: <span id="timeUsed"></span></p>
-                    <p>Remaining time: <span id="timeRemaining"></span></p>
-                    <p>Found pairs: <span id="foundPairs"></span></p>
-                    <p>Average play time: <span id="timeAveragePlayed"></span></p>
-                </div>
-            </div>
-            <!-- Highscores Table -->
-            <div class="flex-1">
-                <div id="topFive" class="overflow-auto lg:ml-4">
-                    <table id="players" class="table-auto w-full">
-                        <thead>
+                <div id="topFive" class="overflow-auto lg:mr-4">
+                    <table id="players" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>Position</th>
-                                <th>Name</th>
-                                <th>Score</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             <!-- Dynamic content -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <!-- Memory Game Status on the right -->
+            <div class="flex-1">
+                <div id="gameStatus" class="mb-4">
+                    <p>Used time: <span id="timeUsed">00:00</span></p>
+                    <p>Remaining time: <span id="timeRemaining">02:00</span></p>
+                    <p>Found pairs: <span id="foundPairs">0</span></p>
+                    <p>Average play time: <span id="averagePlayTime"></span></p>
+                    <p>Average score: <span id="averageScore"></span></p>
+                    <p>Current score: <span id="currentScore">0</span></p>
                 </div>
             </div>
         </div>
@@ -50,8 +53,24 @@
             <section id="board" class="grid grid-cols-4 gap-4 mb-4">
                 <!-- Dynamic content for cards -->
             </section>
-            <button id="startGame" class="bg-blue-500 text-white py-2 px-4 rounded">Start Game</button>
+            <button id="startGame" class="bg-blue-500 text-white py-2 px-4 rounded" onclick="RedirectStartGame()">Start Game</button>
         </div>
     </main>
+
+    <script type="module">
+        import { StartGame } from "../Modules/MemoryHandler.js";
+        async function RedirectStartGame(){
+            await StartGame();
+        }
+        window.RedirectStartGame = RedirectStartGame;
+
+    </script>
+
+    <script type="module">
+        import { fetchAndUpdateScores } from "../Modules/MemoryHandler.js";
+        fetchAndUpdateScores();
+
+    </script>
+
 </body>
 </html>

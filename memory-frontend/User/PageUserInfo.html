@@ -58,6 +58,11 @@
     <input type="button" value="save" onclick="savePreferences()" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
     <input type="button" value="Logout" onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
 
+    <div id="tableContainer">
+        Played Games:
+    </div>
+
+
     <script type="module">
         import { GetPreferences, LoadCards, UpdateImages } from "../Modules/PreferenceHandler.js";
         
@@ -65,10 +70,10 @@
             try {
                 let preferences = await GetPreferences();
 
-                document.getElementById('colorOpen').value = preferences.color_open.toString();;
-                document.getElementById('colorClosed').value = preferences.color_closed.toString();;
-                document.getElementById('colorFound').value = preferences.color_found.toString();;
-                document.getElementById('CharacterSelected').value = preferences.api.toString();;
+                document.getElementById('colorOpen').value = preferences.color_open.toString();
+                document.getElementById('colorClosed').value = preferences.color_closed.toString();
+                document.getElementById('colorFound').value = preferences.color_found.toString();
+                document.getElementById('CharacterSelected').value = preferences.api.toString();
                 document.getElementById('sizeSelected').value = preferences.boardSize.toString();
 
                 // Event listeners for color and character selection changes
@@ -142,5 +147,13 @@
         }
         window.savePreferences = savePreferences;
     </script>
+
+<script type="module">
+    import { FetchGames } from "../Modules/UserHandler.js";
+    import { CreateGameTable } from "../Modules/PreferenceHandler.js";
+
+    let gamesData = await FetchGames();
+    CreateGameTable(gamesData);
+</script>
 </body>
 </html>

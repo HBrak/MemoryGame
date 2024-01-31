@@ -1,4 +1,4 @@
-import { getValidDecodedToken, decodeJWT } from '../Modules/JwtHandler.js'; // Adjust the path as necessary
+import { getValidDecodedToken } from '../Modules/JwtHandler.js';
 
 /**
  * @typedef {Object} Preferences
@@ -169,7 +169,7 @@ function fetchSingleImage(api) {
             } else if (api == 'dog'){
                 return response.json().then(data => data.message);
             } else {
-                // Picsum and Dog APIs return direct image URLs
+                // Picsum APIs return direct image URLs
                 return response.url;
             }
         })
@@ -214,4 +214,106 @@ export async function UpdateImages(imagetype) {
     containers.forEach(container => {
         container.style.backgroundImage = `url('${imgurl}')`;
     });
+}
+
+export async function CreateGameTable(dataArray) {
+    // Create table elements
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    // Apply Tailwind classes to the table
+    table.className = 'min-w-full divide-y divide-gray-200';
+
+    // Define table headers
+    const headers = ['Date', 'Score', 'API', 'Color Closed', 'Color Found'];
+
+    // Create header row
+    let headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        let header = document.createElement('th');
+        let textNode = document.createTextNode(headerText);
+        header.appendChild(textNode);
+        header.addEventListener('click', () => sortTableByColumn(table, headers.indexOf(headerText)));
+        // Apply Tailwind classes to headers
+        header.className = 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer';
+        headerRow.appendChild(header);
+    });
+    thead.appendChild(headerRow);
+
+    // Apply Tailwind classes to thead
+    thead.className = 'bg-gray-50';
+
+    // Add rows from data array
+    dataArray.forEach(obj => {
+        let row = document.createElement('tr');
+
+        row.appendChild(createCell(new Date(obj.date.date).toLocaleString()));
+        row.appendChild(createCell(obj.score));
+        row.appendChild(createCell(obj.api));
+        row.appendChild(createColorCell(obj.color_closed));
+        row.appendChild(createColorCell(obj.color_found));
+    
+        tbody.appendChild(row);
+    });
+
+    // Apply Tailwind classes to tbody
+    tbody.className = 'bg-white divide-y divide-gray-200';
+
+    // Append table to container
+    document.getElementById('tableContainer').appendChild(table);
+}
+
+
+function createCell(text) {
+    let td = document.createElement('td');
+    td.textContent = text;
+    td.className = 'px-6 py-4 whitespace-nowrap';
+    return td;
+}
+
+function createColorCell(hexColor) {
+    let td = document.createElement('td');
+    let colorBox = document.createElement('div');
+
+    colorBox.className = 'w-6 h-6 rounded';
+    colorBox.style.backgroundColor = hexColor;
+
+    if(/^#([0-9A-F]{3}){1,2}$/i.test(hexColor)) {
+        colorBox.style.backgroundColor = hexColor;
+    } else {
+        colorBox.textContent = 'N/A';
+    }
+
+    td.appendChild(colorBox);
+    td.className = 'px-6 py-4 whitespace-nowrap text-center';
+    return td;
+}
+
+
+function sortTableByColumn(table, columnIndex) {
+    // Correctly get the tbody element
+    const tbody = table.getElementsByTagName('tbody')[0];
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Determine the sort direction
+    const isAscending = tbody.getAttribute('data-sort-direction') === 'ascending';
+    tbody.setAttribute('data-sort-direction', isAscending ? 'descending' : 'ascending');
+
+    // Sort rows
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.querySelectorAll('td')[columnIndex].textContent;
+        const cellB = rowB.querySelectorAll('td')[columnIndex].textContent;
+
+        if (columnIndex === 0) { // For date column, sort by date
+            return isAscending ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
+        } else { // For other columns
+            return isAscending ? cellA.localeCompare(cellB, undefined, {numeric: true}) : cellB.localeCompare(cellA, undefined, {numeric: true});
+        }
+    });
+
+    // Append sorted rows
+    rows.forEach(row => tbody.appendChild(row));
 }
