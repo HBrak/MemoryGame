@@ -1,11 +1,37 @@
 import { getValidDecodedToken } from '../Modules/JwtHandler.js'; // Adjust the path as necessary
 
-function checkAuthenticationAndRedirect() {
-    if (!getValidDecodedToken()) {
-        window.location.href = '../User/PageLogin.html'; // Adjust the redirect URL as necessary
-        
-    }
+
+var monitoring;
+var monitoringInterval = null;
+
+function clearMonitoring() {
+  if (monitoringInterval !== null) {
+    clearInterval(monitoringInterval);
+    monitoringInterval = null;
+    monitoring = false;
+  }
 }
 
-// Perform the check as soon as the script is loaded
-checkAuthenticationAndRedirect();
+function startMonitoring() {
+
+    if(monitoring){
+        return;
+    }
+
+    clearMonitoring();
+
+    if (!getValidDecodedToken()) {
+        window.location.href = '../User/PageLogin.html';
+        return;
+    }
+    
+    monitoringInterval = setInterval(() => {
+        monitoring = true;
+        if (!getValidDecodedToken()) {
+            clearInterval(monitoringInterval);
+            window.location.href = '../User/PageLogin.html';
+        }
+    }, 1000);
+}
+
+startMonitoring();

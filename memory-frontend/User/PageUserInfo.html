@@ -11,10 +11,15 @@
     <title>Account Info</title>
 </head>
 <body class="bg-gray-100 p-4">
-    <script type="module" src="../Modules/RedirectIfNotAuthenticated.js"></script>
+    
     <script src="../Scripts/MenuHeader.js"></script>
 
     <h1 class="text-2xl font-bold text-center my-6">Account Information</h1>
+
+    <div class="mb-4">
+        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+        <input type="email" id="email" name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
 
     <section id="preferences" class="space-y-4">
         <div class="setting-character flex justify-between items-center">
@@ -65,6 +70,7 @@
 
     <script type="module">
         import { GetPreferences, LoadCards, UpdateImages } from "../Modules/PreferenceHandler.js";
+        import { GetEmail } from "../Modules/UserHandler.js";
         
         document.addEventListener('DOMContentLoaded', async () => {
             try {
@@ -94,6 +100,9 @@
                 });
 
                 LoadCards();
+
+
+
             } catch (error) {
                 console.error("Error loading preferences:", error);
             }
@@ -105,6 +114,9 @@
                 card.style.backgroundColor = color;
             });
         }
+
+
+        document.getElementById('email').value = await GetEmail();
     </script>
 
 
@@ -117,9 +129,12 @@
         window.logout = logout;
     </script>
 
+    <script type="module" src="../Modules/RedirectIfNotAuthenticated.js"></script>
+
     <script type="module">
         import { GetPreferences, SetPreferences, PostPreferences } from "../Modules/PreferenceHandler.js";
         import { getValidDecodedToken } from "../Modules/JwtHandler.js";
+        import { SetEmail } from "../Modules/UserHandler.js";
 
         async function savePreferences(){
             try {
@@ -141,6 +156,8 @@
                 );
 
                 await PostPreferences();
+                SetEmail(document.getElementById('email').value)
+
             } catch (error) {
                 console.error("Error saving preferences:", error);
             }

@@ -161,3 +161,82 @@ export async function AddGameToUser(score, api, color_found, color_closed){
         return false;
     });
 }
+
+export async function GetEmail(){
+    let jwtToken = getValidDecodedToken();
+
+    if (!jwtToken) {
+        console.error('JWT token not found');
+        return Promise.resolve(false);
+    }
+
+    var url = 'http://localhost:8000/api/player/' + jwtToken.sub + '/email';
+
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + jwtToken.token,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        console.log(response);
+        return response.json();
+    })
+    .then(data => {
+        if (data) {
+            console.log(data);
+            return data;
+        } else {
+            return false;
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        return false;
+    });
+}
+
+export async function SetEmail(emailAdress){
+    let jwtToken = getValidDecodedToken();
+
+    if (!jwtToken) {
+        console.error('JWT token not found');
+        return Promise.resolve(false);
+    }
+
+    var url = 'http://localhost:8000/api/player/' + jwtToken.sub + '/email';
+
+    let data = {
+        email: emailAdress
+    }
+
+    return fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer ' + jwtToken.token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response;
+    })
+    .then(data => {
+        if (data) {
+            return data;
+        } else {
+            return false;
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        return false;
+    });
+}
