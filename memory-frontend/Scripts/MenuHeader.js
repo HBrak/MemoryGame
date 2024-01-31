@@ -1,4 +1,7 @@
-if (window.self === window.top) {
+
+import { getValidDecodedToken } from '../Modules/JwtHandler.js';
+
+document.addEventListener('DOMContentLoaded', function () {
   // Create header element
   const header = document.createElement('header');
   header.className = 'bg-blue-500'; // Change the background color
@@ -33,11 +36,28 @@ if (window.self === window.top) {
   // Use flexbox for horizontal layout
   ul.className = 'lg:flex lg:flex-row';
 
-  // Create navigation items
-  const navItems = [
-    { href: '../User/PageUserInfo.html', text: 'Account' },
-    { href: '../Game/PageGame.html', text: 'Game' }
-  ];
+  var navItems = [];
+
+  let decodedToken = getValidDecodedToken();
+
+  const isAdmin = decodedToken.roles.includes('ROLE_ADMIN');
+
+  if (isAdmin) {
+      // Create navigation items
+    navItems = [
+      { href: '../User/PageUserInfo.html', text: 'Account' },
+      { href: '../Game/PageGame.html', text: 'Game' },
+      { href: 'http://localhost:4200/', text: 'AdminPanel' }
+    ];
+  } else {
+    // Create navigation items
+    navItems = [
+      { href: '../User/PageUserInfo.html', text: 'Account' },
+      { href: '../Game/PageGame.html', text: 'Game' }
+    ];
+  }
+
+
 
   navItems.forEach(item => {
     const li = document.createElement('li');
@@ -48,6 +68,17 @@ if (window.self === window.top) {
     a.className = 'block text-white hover:text-blue-300';
     a.href = item.href;
     a.textContent = item.text;
+
+    if (item.text === 'AdminPanel') {
+      a.addEventListener('click', (event) => {
+        // Prevent the default link behavior
+        event.preventDefault();
+        
+        // Open the link in a new window/tab with _blank target
+        window.open(item.href, '_blank');
+      });
+    }
+
     li.appendChild(a);
     ul.appendChild(li);
   });
@@ -59,5 +90,5 @@ if (window.self === window.top) {
   header.appendChild(nav);
 
   // Append the header to the body or a specific container
-  document.body.appendChild(header);
-}
+  document.body.prepend(header);
+})

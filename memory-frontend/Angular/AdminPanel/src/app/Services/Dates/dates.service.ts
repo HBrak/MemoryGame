@@ -17,7 +17,7 @@ export class DatesService {
   }
 
   private initialize(): void {
-    this.jwtService.loginUser('Henk', 'henk');
+    //this.jwtService.loginUser('Henk', 'henk');
   }
 
   getDates() : Observable<Date[]> {
@@ -28,7 +28,6 @@ export class DatesService {
     
     return this.http.get<{ [key: string]: number }>(this.apiUrl, { headers: headers }).pipe(
       map(data => {
-        // Convert the data into an array of Date objects
         const datesArray: Date[] = Object.entries(data).map(([date, value]) => ({ date, value }));
         return datesArray;
       })

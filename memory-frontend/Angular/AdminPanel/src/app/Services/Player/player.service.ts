@@ -16,7 +16,7 @@ export class PlayerService {
   }
 
   private initialize(): void {
-    this.jwtService.loginUser('Henk', 'henk');
+    //this.jwtService.loginUser('Henk', 'henk');
   }
 
   getPlayers(): Observable<Player[]> {

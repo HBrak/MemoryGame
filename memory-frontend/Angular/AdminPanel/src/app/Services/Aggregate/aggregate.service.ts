@@ -17,7 +17,7 @@ export class AggregateService {
   }
 
   private initialize(): void {
-    this.jwtService.loginUser('Henk', 'henk');
+    //this.jwtService.loginUser('Henk', 'henk');
   }
 
   getData() : Observable<AggregatedData> {
@@ -31,7 +31,6 @@ export class AggregateService {
     return this.http.get<AggregatedData>(this.apiUrl, { headers: headers })
     .pipe(
       map((response: any) => {
-        // Perform any additional data transformation here if needed
         return this.transformData(response);
       })
     )
